@@ -1,16 +1,9 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'debug'
-
-# score：入力した点数を取得
 score = ARGV[0]
-
-# scores:スコアを分割して配列にする
 scores = score.split(',')
 
-# Xを10に変換、それ以外は数字にする
-# shotsという配列に入れる
 shots = []
 scores.each do |s|
   shots << (s == 'X' ? 10 : s.to_i)
@@ -19,11 +12,11 @@ end
 ############################################
 
 ## ここはフレームに分けることのみに特化
-
 # フレームを計算する・フレームは最大10まで
-# index:shots配列が今何番目かをカウントする
+
 index = 0
 frames = []
+
 # framesが10以下まで計算を続ける
 while frames.size < 10
   if shots[index] == 10
