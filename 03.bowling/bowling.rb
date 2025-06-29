@@ -6,7 +6,7 @@ scores = score.split(',')
 
 shots = []
 scores.each do |s|
-  shots << (s == 'X' ? 10 : s.to_i)
+  shots = scores.map { |s| s == "X" ? 10 : s.to_i }
 end
 
 ############################################
@@ -43,32 +43,24 @@ end
 ################################################
 
 ## ここから得点計算
-
-point = 0
-
-frames[0..9].each_with_index do |frame, i|
+point = frames[0..9].each_with_index.sum do |frame, i|
   if i == 9
-    point += frame.sum
-    next
-  end
-
+    frame.sum
   # ストライク
-  if frame[0] == 10
+  elsif frame[0] == 10
     all_throws = frames.flatten
     throw_index = frames[0...i].flatten.size
 
-    next_number = all_throws[throw_index + 1] || 0
-    next_number2 = all_throws[throw_index + 2] || 0
-    point += 10 + next_number + next_number2
-
+    next_score = all_throws[throw_index + 1]
+    next_score2 = all_throws[throw_index + 2]
+    10 + next_score + next_score2
   # スペア
   elsif frame.sum == 10
-    next_number = frames[i + 1] ? frames[i + 1][0] : 0
-    point += 10 + next_number
-
+    next_score = frames[i + 1][0]
+    10 + next_score
   # それ以外　
   else
-    point += frame.sum
+    frame.sum
   end
 end
 
