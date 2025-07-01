@@ -6,7 +6,6 @@ scores = score.split(',')
 
 shots = scores.map { |s| s == 'X' ? 10 : s.to_i }
 
-point = 0
 index = 0
 
 point = 10.times.sum do
