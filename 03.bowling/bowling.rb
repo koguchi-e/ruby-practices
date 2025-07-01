@@ -8,20 +8,24 @@ shots = scores.map { |s| s == 'X' ? 10 : s.to_i }
 
 point = 0
 index = 0
-frame = 0
 
-while frame < 10
-  if shots[index] == 10
-    point += 10 + shots[index + 1] + shots[index + 2]
-    index += 1
-  elsif shots[index] + shots[index + 1] == 10
-    point += 10 + shots[index + 2]
-    index += 2
-  else
-    point += shots[index] + shots[index + 1]
-    index += 2
-  end
-  frame += 1
+point = 10.times.sum do
+  shot = shots[index]
+  next_shot1 = shots[index + 1]
+  next_shot2 = shots[index + 2]
+
+  frame_score =
+    if shot == 10
+      shot + next_shot1 + next_shot2
+    elsif shot + next_shot1 == 10
+      shot + next_shot1 + next_shot2
+    else
+      shot + next_shot1
+    end
+
+  index += (shot == 10 ? 1 : 2)
+
+  frame_score
 end
 
 puts point
