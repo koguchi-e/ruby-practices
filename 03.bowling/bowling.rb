@@ -13,16 +13,13 @@ point = 10.times.sum do
   next_shot1 = shots[index + 1]
   next_shot2 = shots[index + 2]
 
-  frame_score =
-    if shot == 10
-      shot + next_shot1 + next_shot2
-    elsif shot + next_shot1 == 10
-      shot + next_shot1 + next_shot2
-    else
-      shot + next_shot1
-    end
+  strike = shot == 10
+  spare = shot + next_shot1 == 10
 
-  index += (shot == 10 ? 1 : 2)
+  frame_score =
+    shot + next_shot1 + (strike || spare ? next_shot2 : 0)
+
+  index += (strike ? 1 : 2)
 
   frame_score
 end
