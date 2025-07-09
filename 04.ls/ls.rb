@@ -7,7 +7,7 @@ sorted = files.sort_by do |f|
   [File.directory?(f) ? 0 : 1, f.downcase]
 end
 
-rows = ( sorted.size.to_f / 3).ceil
+rows = (sorted.size.to_f / 3).ceil
 
 columns_array = Array.new(3) { [] }
 
