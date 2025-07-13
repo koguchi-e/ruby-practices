@@ -13,6 +13,9 @@
 /test/tmp/
 /test/version_tmp/
 /tmp/
+04.ls/dir1
+04.ls/dir2
+04.ls/dir3
 04.ls/file1.txt
 04.ls/file2.txt
 04.ls/file3.txt
