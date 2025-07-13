@@ -21,4 +21,3 @@ row_count.times do |row_idx|
   line = columns.map { |col| col[row_idx] || '' }.map { |name| name.ljust(20) }.join
   puts line.rstrip
 end
-
