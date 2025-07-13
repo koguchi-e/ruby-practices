@@ -1,22 +1,24 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-files = Dir.children('.').reject { |f| f.start_with?('.') }
+files = Dir['*']
 
 sorted = files.sort_by do |f|
   [File.directory?(f) ? 0 : 1, f.downcase]
 end
 
-rows = (sorted.size.to_f / 3).ceil
+cells = 3
 
-columns_array = Array.new(3) { [] }
+row_count = (sorted.size.to_f / cells).ceil
+columns = Array.new(cells) { [] }
 
 sorted.each_with_index do |file, index|
-  col = index / rows
-  columns_array[col] << file
+  col = index / row_count
+  columns[col] << file
 end
 
-(0...rows).each do |row_idx|
-  line = columns_array.map { |col| col[row_idx] || '' }.map { |name| name.ljust(20) }.join
+row_count.times do |row_idx|
+  line = columns.map { |col| col[row_idx] || '' }.map { |name| name.ljust(20) }.join
   puts line.rstrip
 end
+
