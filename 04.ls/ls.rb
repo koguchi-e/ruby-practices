@@ -7,10 +7,10 @@ sorted = files.sort_by do |f|
   [File.directory?(f) ? 0 : 1, f.downcase]
 end
 
-cells = 3
+CELLS = 3
 
-row_count = (sorted.size.to_f / cells).ceil
-columns = Array.new(cells) { [] }
+row_count = (sorted.size.to_f / CELLS).ceil
+columns = Array.new(CELLS) { [] }
 
 sorted.each_with_index do |file, index|
   col = index / row_count
