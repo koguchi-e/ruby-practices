@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-files = Dir['*']
+show_all = ARGV.include?("-a")
+files = show_all ? Dir.entries(".") : Dir["*"]
 
 sorted = files.sort_by do |f|
   [File.directory?(f) ? 0 : 1, f.downcase]
