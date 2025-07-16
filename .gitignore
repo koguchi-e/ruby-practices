@@ -16,9 +16,11 @@
 04.ls/dir1
 04.ls/dir2
 04.ls/dir3
+04.ls/ruby-dir
 04.ls/file1.txt
 04.ls/file2.txt
 04.ls/file3.txt
+04.ls/a-file.txt
 
 # Used by dotenv library to load environment variables.
 # .env
