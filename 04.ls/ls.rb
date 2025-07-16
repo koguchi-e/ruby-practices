@@ -1,19 +1,17 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-show_all = ARGV.include?("-a")
-files = show_all ? Dir.entries(".") : Dir["*"]
+show_all = ARGV.include?('-a')
+files = show_all ? Dir.entries('.') : Dir['*']
 
-sorted = files.sort_by do |f|
-  [File.directory?(f) ? 0 : 1, f.downcase]
-end
+files.sort_by!(&:downcase)
 
 CELLS = 3
 
-row_count = (sorted.size.to_f / CELLS).ceil
+row_count = (files.size.to_f / CELLS).ceil
 columns = Array.new(CELLS) { [] }
 
-sorted.each_with_index do |file, index|
+files.each_with_index do |file, index|
   col = index / row_count
   columns[col] << file
 end
