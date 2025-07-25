@@ -20,6 +20,7 @@
 04.ls/file1.txt
 04.ls/file2.txt
 04.ls/file3.txt
+04.ls/File4.txt
 04.ls/a-file.txt
 
 # Used by dotenv library to load environment variables.

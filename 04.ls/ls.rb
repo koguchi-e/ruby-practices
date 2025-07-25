@@ -2,9 +2,11 @@
 # frozen_string_literal: true
 
 show_all = ARGV.include?('-a')
-files = show_all ? Dir.entries('.') : Dir['*']
+show_reverse = ARGV.include?('-r')
 
+files = show_all ? Dir.entries('.') : Dir['*']
 files.sort_by!(&:downcase)
+files.reverse! if show_reverse
 
 CELLS = 3
 
