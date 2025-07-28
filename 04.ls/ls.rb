@@ -17,12 +17,23 @@ if show_list
   puts "total #{total_blocks}"
 
   files.each do |file|
-    type_char = case File.ftype(file)
-                  when "directory" then "d"
-                  when "file" then "-"
-                end
-    permission =  File.stat(file).mode
-    permission = sprintf("%o", 33188)
+    def permission_string(mode)
+      file_type = case mode & 0o170000
+                  when 0o040000 then 'd'
+                  when 0o100000 then '-'
+                  when 0o120000 then 'l'
+                  else '?'
+                  end
+      perms = String.new
+      [6, 3, 0].each do |shift|
+        bits = (mode >> shift) &  0b111
+        perms << ((bits & 0b100).zero? ? '-' : 'r')
+        perms << ((bits & 0b010).zero? ? '-' : 'w')
+        perms << ((bits & 0b001).zero? ? '-' : 'x')
+      end
+      file_type + perms
+    end
+    mode = File.stat(file).mode
 
     hard_link = File.stat(file).nlink
 
@@ -30,12 +41,12 @@ if show_list
     owner_user = Etc.getpwuid(File.stat(file).uid).name
     owner_group = Etc.getgrgid(File.stat(file).gid).name
 
-    bites = File.size(file)
+    file_size = File.size(file)
 
     time_stamp = File.atime(file)
     formatted_time = time_stamp.strftime("%b %e %H:%M")
 
-    puts "#{type_char}#{permission} #{hard_link} #{owner_user} #{owner_group} #{bites} #{formatted_time} #{file}"
+    puts "#{permission_string(mode)} #{hard_link} #{owner_user} #{owner_group} #{file_size} #{formatted_time} #{file}"
   end
 else
   CELLS = 3
