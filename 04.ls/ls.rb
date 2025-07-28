@@ -10,43 +10,48 @@ files.sort_by!(&:downcase)
 files.reverse! if show_reverse
 
 if show_list
-  total_files = files.sum do |file| 
-    File.exist?(file) ? File.stat(file).blocks : 0 
+  total_files = files.sum do |file|
+    File.exist?(file) ? File.stat(file).blocks : 0
   end
   total_blocks = (total_files / 2.0).ceil
   puts "total #{total_blocks}"
 
-  files.each do |file|
-    def permission_string(mode)
-      file_type = case mode & 0o170000
-                  when 0o040000 then 'd'
-                  when 0o100000 then '-'
-                  when 0o120000 then 'l'
-                  else '?'
-                  end
-      perms = String.new
-      [6, 3, 0].each do |shift|
-        bits = (mode >> shift) &  0b111
-        perms << ((bits & 0b100).zero? ? '-' : 'r')
-        perms << ((bits & 0b010).zero? ? '-' : 'w')
-        perms << ((bits & 0b001).zero? ? '-' : 'x')
-      end
-      file_type + perms
+  require 'etc'
+
+  def permission_string(mode)
+    file_type = case mode & 0o170000
+                when 0o040000 then 'd'
+                when 0o100000 then '-'
+                when 0o120000 then 'l'
+                else '?'
+                end
+    perms = +''
+    [6, 3, 0].each do |shift|
+      bits = (mode >> shift) & 0b111
+      perms << ((bits & 0b100).zero? ? '-' : 'r')
+      perms << ((bits & 0b010).zero? ? '-' : 'w')
+      perms << ((bits & 0b001).zero? ? '-' : 'x')
     end
-    mode = File.stat(file).mode
+    file_type + perms
+  end
 
-    hard_link = File.stat(file).nlink
+  files.each do |file|
+    stat = File.stat(file)
+    mode = stat.mode
+    hard_link = stat.nlink
+    owner_user = Etc.getpwuid(stat.uid).name
+    owner_group = Etc.getgrgid(stat.gid).name
+    file_size = stat.size
+    time_stamp = stat.mtime.strftime('%b %e %H:%M')
 
-    require 'etc'
-    owner_user = Etc.getpwuid(File.stat(file).uid).name
-    owner_group = Etc.getgrgid(File.stat(file).gid).name
-
-    file_size = File.size(file)
-
-    time_stamp = File.atime(file)
-    formatted_time = time_stamp.strftime("%b %e %H:%M")
-
-    puts "#{permission_string(mode)} #{hard_link} #{owner_user} #{owner_group} #{file_size} #{formatted_time} #{file}"
+    printf "%<perm>s %<link>2d %<user>-8s %<group>-8s %<size>4d %<time>s %<name>s\n",
+           perm: permission_string(mode),
+           link: hard_link,
+           user: owner_user,
+           group: owner_group,
+           size: file_size,
+           time: time_stamp,
+           name: file
   end
 else
   CELLS = 3
