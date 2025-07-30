@@ -10,8 +10,7 @@ def permission_string(mode)
               when 0o120000 then 'l'
               else '?'
               end
-  perms = +''
-  [6, 3, 0].map do |shift|
+  perms = [6, 3, 0].map do |shift|
     bits = (mode >> shift) & 0b111
     [[0b100, 'r'], [0b010, 'w'], [0b001, 'x']].map do |mask, char|
       (bits & mask).zero? ? '-' : char
