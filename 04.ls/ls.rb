@@ -21,11 +21,7 @@ def permission_string(mode)
 end
 
 def show_list_format(files)
-  total_files = files.sum do |file|
-    File.exist?(file) ? File.stat(file).blocks : 0
-  end
-  total_blocks = (total_files / 2.0).ceil
-  puts "total #{total_blocks}"
+  puts "total #{calc_total_blocks(files)}"
 
   files.each do |file|
     stat = File.stat(file)
@@ -49,6 +45,13 @@ def show_list_format(files)
   end
 end
 
+def calc_total_blocks(files)
+  total_files = files.sum do |file|
+    File.exist?(file) ? File.stat(file).blocks : 0
+  end
+  (total_files / 2.0).ceil
+end
+
 def show_column_format(files)
   cells = 3
   row_count = (files.size.to_f / cells).ceil
@@ -60,7 +63,7 @@ def show_column_format(files)
   end
 
   row_count.times do |row_idx|
-    line = columns.map { |col| col[row_idx] || '' }.map { |name| name.ljust(20) }.join
+    line = columns.map { |col| col[row_idx] || ' ' }.map { |name| name.ljust(20) }.join
     puts line.rstrip
   end
 end
