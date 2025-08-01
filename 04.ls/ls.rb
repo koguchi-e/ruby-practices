@@ -67,9 +67,13 @@ def show_column_format(files)
   end
 end
 
-show_all = ARGV.include?('-a')
-show_reverse = ARGV.include?('-r')
-show_list = ARGV.include?('-l')
+options = ARGV.flat_map do |argument|
+  argument.start_with?('-') ? argument[1..].chars.map { |c| "-#{c}" } : argument
+end
+
+show_all = options.include?('-a')
+show_reverse = options.include?('-r')
+show_list = options.include?('-l')
 
 files = show_all ? Dir.entries('.') : Dir['*']
 files.sort_by!(&:downcase)
