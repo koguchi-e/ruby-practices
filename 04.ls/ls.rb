@@ -67,9 +67,9 @@ def show_column_format(files)
   end
 end
 
-options = ARGV.flat_map { |argument| 
-  argument.start_with?('-') ? argument[1..].chars.map { |c| "-#{c}"} : argument
-}
+options = ARGV.flat_map do |argument|
+  argument.start_with?('-') ? argument[1..].chars.map { |c| "-#{c}" } : argument
+end
 
 show_all = options.include?('-a')
 show_reverse = options.include?('-r')
