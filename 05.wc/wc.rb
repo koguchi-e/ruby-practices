@@ -3,6 +3,7 @@
 
 show_line_count = ARGV.include?('-l')
 show_word_count = ARGV.include?('-w')
+show_byte_count = ARGV.include?('-c')
 
 file = File.join(__dir__, "file3.txt")
 
@@ -17,5 +18,12 @@ def print_word_count(file)
   puts "#{word_count} #{file}"
 end
 
+def print_byte_count(file)
+  text = File.read(file)
+  byte_count = text.length
+  puts "#{byte_count} #{file}"
+end
+
 print_line_count(file) if show_line_count
 print_word_count(file) if show_word_count
+print_byte_count(file) if show_byte_count
