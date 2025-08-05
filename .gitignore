@@ -22,6 +22,9 @@
 04.ls/file3.txt
 04.ls/File4.txt
 04.ls/a-file.txt
+05.wc/file1.txt
+05.wc/file2.txt
+05.wc/file3.txt
 
 # Used by dotenv library to load environment variables.
 # .env
