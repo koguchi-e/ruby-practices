@@ -25,7 +25,7 @@ def print_count(counts, display_options = {}, file = '')
   output << counts[:word] if display_options[:word]
   output << counts[:byte] if display_options[:byte]
   output << file unless file.empty?
-  puts output.join(' ')
+  puts '   ' + output.join('   ')
 end
 
 if file_names.empty?
