@@ -7,39 +7,45 @@ options = options.flat_map { |opt| opt[1..].chars.map { |c| "-#{c}" } }
 show_line_count = options.include?('-l')
 show_word_count = options.include?('-w')
 show_byte_count = options.include?('-c')
+show_line_count = show_word_count = show_byte_count = true unless show_line_count || show_word_count || show_byte_count
 
-if !show_line_count && !show_word_count && !show_byte_count
-  show_line_count = show_word_count = show_byte_count = true
+display_options = { line: show_line_count, word: show_word_count, byte: show_byte_count }
+
+def count(text)
+  {
+    line: text.lines.count,
+    word: text.split.size,
+    byte: text.bytesize
+  }
 end
 
-def count_from_text(text, file = '')
-  line_count = text.lines.count
-  word_count = text.split.size
-  byte_count = text.bytesize
-
+def print_count(counts, display_options = {}, file = '')
   output = []
-  output << line_count if $show_line_count
-  output << word_count if $show_word_count
-  output << byte_count if $show_byte_count
+  output << counts[:line] if display_options[:line]
+  output << counts[:word] if display_options[:word]
+  output << counts[:byte] if display_options[:byte]
   output << file unless file.empty?
   puts output.join(' ')
 end
 
-$show_line_count = show_line_count
-$show_word_count = show_word_count
-$show_byte_count = show_byte_count
-
 if file_names.empty?
-  input_text = $stdin.read
-  count_from_text(input_text)
+  print_count($stdin.read, display_options)
 else
+  total = { line: 0, word: 0, byte: 0 }
+
   file_names.each do |file|
     if File.exist?(file)
       text = File.read(file)
-      count_from_text(text, file)
+      counts = count(text)
+      print_count(counts, display_options, file)
+
+      total.each_key { |k| total[k] += counts[k] }
     else
       warn "#{file}: No such file"
     end
   end
-end
 
+  if file_names.size > 1
+    print_count(total, display_options, 'total')
+  end
+end
