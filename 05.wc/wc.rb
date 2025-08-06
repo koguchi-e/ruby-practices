@@ -12,7 +12,7 @@ if !show_line_count && !show_word_count && !show_byte_count
   show_line_count = show_word_count = show_byte_count = true
 end
 
-def count_from_text(text, name = '')
+def count_from_text(text, file = '')
   line_count = text.lines.count
   word_count = text.split.size
   byte_count = text.bytesize
@@ -21,7 +21,7 @@ def count_from_text(text, name = '')
   output << line_count if $show_line_count
   output << word_count if $show_word_count
   output << byte_count if $show_byte_count
-  output << name unless name.empty?
+  output << file unless file.empty?
   puts output.join(' ')
 end
 
