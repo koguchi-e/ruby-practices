@@ -1,11 +1,12 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-show_line_count = ARGV.include?('-l')
-show_word_count = ARGV.include?('-w')
-show_byte_count = ARGV.include?('-c')
+options, file_names = ARGV.partition { |arg| arg.start_with?('-') }
+options = options.flat_map { |opt| opt[1..].chars.map { |c| "-#{c}" } }
 
-file_names = ARGV.reject { |option| ['-l', '-w', '-c'].include?(option)}
+show_line_count = options.include?('-l')
+show_word_count = options.include?('-w')
+show_byte_count = options.include?('-c')
 
 if !show_line_count && !show_word_count && !show_byte_count
   show_line_count = show_word_count = show_byte_count = true
@@ -20,7 +21,7 @@ def count_from_text(text, name = '')
   output << line_count if $show_line_count
   output << word_count if $show_word_count
   output << byte_count if $show_byte_count
-  output << file unless name.empty?
+  output << name unless name.empty?
   puts output.join(' ')
 end
 
