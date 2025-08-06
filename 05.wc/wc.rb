@@ -30,7 +30,7 @@ def print_count(counts, display_options = {}, file = '')
   if enabled.size == 1
     puts output.join(' ')
   else
-    puts '     ' + output.join('     ')
+    puts "     #{output.join('     ')}"
   end
 end
 
