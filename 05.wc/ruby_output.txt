@@ -1,8 +1,0 @@
-total 24
--rw-r--r--  1 koguchi-e koguchi-e  101 Aug  5 11:32 file1.txt
--rw-r--r--  1 koguchi-e koguchi-e   11 Aug  5 11:37 file2.txt
--rw-r--r--  1 koguchi-e koguchi-e   48 Aug  5 11:38 file3.txt
--rwxr-xr-x  1 koguchi-e koguchi-e 2039 Aug  6 12:34 ls.rb
--rw-r--r--  1 koguchi-e koguchi-e  371 Aug  6 14:02 ls_output.txt
--rw-r--r--  1 koguchi-e koguchi-e    0 Aug  6 14:02 ruby_output.txt
--rw-r--r--  1 koguchi-e koguchi-e 1072 Aug  6 12:47 wc.rb
