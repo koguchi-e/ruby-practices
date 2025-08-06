@@ -33,7 +33,7 @@ def show_list_format(files)
     perm = permission_string(mode)
     name = file
 
-    printf "%<perm>s %<link>2d %<user>-8s %<group>-8s %<size>4d %<time>s %<name>s\n",
+    printf "%<perm>s%<link>2d %<user>-8s %<group>-8s %<size>4d %<time>s %<name>s\n",
            perm:,
            link:,
            user:,
