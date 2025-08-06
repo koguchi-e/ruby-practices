@@ -5,25 +5,28 @@ show_line_count = ARGV.include?('-l')
 show_word_count = ARGV.include?('-w')
 show_byte_count = ARGV.include?('-c')
 
-file = File.join(__dir__, "file3.txt")
+file_names = ARGV.reject { |option| ['-l', '-w', '-c'].include?(option)}
 
-def print_line_count(file)
-  line_count = File.readlines(file).size
-  puts "#{line_count} #{file}"
+if !show_line_count && !show_word_count && !show_byte_count
+  show_line_count = show_word_count = show_byte_count = true
 end
 
-def print_word_count(file)
+def print_counts(file, show_line_count, show_word_count, show_byte_count)
   text = File.read(file)
+  line_count = text.lines.count
   word_count = text.split.size
-  puts "#{word_count} #{file}"
+  byte_count = text.bytesize
+
+  output = []
+  output << line_count if show_line_count
+  output << word_count if show_word_count
+  output << byte_count if show_byte_count
+  output << file
+  puts output.join(' ')
 end
 
-def print_byte_count(file)
-  text = File.read(file)
-  byte_count = text.length
-  puts "#{byte_count} #{file}"
+file_names.each do |file|
+  if File.exist?(file)
+    print_counts(file, show_line_count, show_word_count, show_byte_count)
+  end
 end
-
-print_line_count(file) if show_line_count
-print_word_count(file) if show_word_count
-print_byte_count(file) if show_byte_count
