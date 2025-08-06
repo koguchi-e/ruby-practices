@@ -20,16 +20,22 @@ def count(text)
 end
 
 def print_count(counts, display_options = {}, file = '')
+  enabled = display_options.select { |_, v| v }
   output = []
   output << counts[:line] if display_options[:line]
   output << counts[:word] if display_options[:word]
   output << counts[:byte] if display_options[:byte]
   output << file unless file.empty?
-  puts '   ' + output.join('   ')
+
+  if enabled.size == 1
+    puts output.join(' ')
+  else
+    puts '     ' + output.join('     ')
+  end
 end
 
 if file_names.empty?
-  print_count($stdin.read, display_options)
+  print_count(count($stdin.read), display_options)
 else
   total = { line: 0, word: 0, byte: 0 }
 
@@ -45,7 +51,5 @@ else
     end
   end
 
-  if file_names.size > 1
-    print_count(total, display_options, 'total')
-  end
+  print_count(total, display_options, 'total') if file_names.size > 1
 end
