@@ -4,12 +4,16 @@
 options, file_names = ARGV.partition { |arg| arg.start_with?('-') }
 options = options.flat_map { |opt| opt[1..].chars.map { |c| "-#{c}" } }
 
-show_line_count = options.include?('-l')
-show_word_count = options.include?('-w')
-show_byte_count = options.include?('-c')
-show_line_count = show_word_count = show_byte_count = true unless show_line_count || show_word_count || show_byte_count
-
-display_options = { line: show_line_count, word: show_word_count, byte: show_byte_count }
+display_options =
+  if options.empty?
+    { line: true, word: true, byte: true }
+  else
+    {
+      line: options.include?('-l'),
+      word: options.include?('-w'),
+      byte: options.include?('-c')
+    }
+  end
 
 def count(text)
   {
@@ -20,13 +24,13 @@ def count(text)
 end
 
 def print_count(counts, display_options = {}, file = '')
-  enabled = display_options.select { |_, v| v }
   output = []
-  output << counts[:line] if display_options[:line]
-  output << counts[:word] if display_options[:word]
-  output << counts[:byte] if display_options[:byte]
+  %i[line word byte].each do |type|
+    output << counts[type] if display_options[type]
+  end
   output << file unless file.empty?
 
+  enabled = display_options.select { |_, v| v }
   if enabled.size == 1
     puts output.join(' ')
   else
