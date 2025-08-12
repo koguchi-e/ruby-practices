@@ -30,8 +30,7 @@ def print_count(counts, display_options = {}, file = '')
   end
   output << file unless file.empty?
 
-  enabled = display_options.select { |_, v| v }
-  if enabled.size == 1
+  if display_options.values.count(true) == 1
     puts output.join(' ')
   else
     puts "     #{output.join('     ')}"
