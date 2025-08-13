@@ -23,12 +23,12 @@ def count(text)
   }
 end
 
-def print_count(counts, display_options = {}, file = '')
-  only_one = display_options.values.count(true) == 1
+def print_count(counts, display_options = {}, file = '', multiple_files = false)
+  align_right = display_options.values.count(true) > 1 || multiple_files
 
   output = %i[line word byte].filter_map do |type|
     if display_options[type]
-      only_one ? counts[type].to_s : counts[type].to_s.rjust(3)
+      align_right ? counts[type].to_s.rjust(3) : counts[type].to_s
     end
   end
 
@@ -41,17 +41,18 @@ if file_names.empty?
 else
   total = { line: 0, word: 0, byte: 0 }
 
+  multiple_files = file_names.size > 1
+
   file_names.each do |file|
     if File.exist?(file)
       text = File.read(file)
       counts = count(text)
-      print_count(counts, display_options, file)
-
+      print_count(counts, display_options, file, multiple_files)
       total.each_key { |k| total[k] += counts[k] }
     else
       warn "#{file}: No such file"
     end
   end
 
-  print_count(total, display_options, 'total') if file_names.size > 1
+  print_count(total, display_options, 'total', multiple_files) if file_names.size > 1
 end
