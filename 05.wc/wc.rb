@@ -3,10 +3,11 @@
 
 options, file_names = ARGV.partition { |arg| arg.start_with?('-') }
 options = options.flat_map { |opt| opt[1..].chars.map { |c| "-#{c}" } }
+ls_output = ARGV.empty? && !$stdin.tty?
 
 display_options =
   if options.empty?
-    { line: true, word: true, byte: true }
+    ls_output ? {} : { line: true, word: true, byte: true }
   else
     {
       line: options.include?('-l'),
@@ -25,10 +26,17 @@ end
 
 def print_count(counts, display_options = {}, file = '', multiple_files = false)
   align_right = display_options.values.count(true) > 1 || multiple_files
+  ls_output = display_options.values.none? && !$stdin.tty?
+  display_options = { line: true, word: true, byte: true} if ls_output
 
   output = %i[line word byte].filter_map do |type|
-    if display_options[type]
-      align_right ? counts[type].to_s.rjust(3) : counts[type].to_s
+    next unless display_options[type]
+    if align_right 
+      counts[type].to_s.rjust(3)
+    elsif ls_output
+      counts[type].to_s.rjust(7)
+    else
+      counts[type].to_s
     end
   end
 
