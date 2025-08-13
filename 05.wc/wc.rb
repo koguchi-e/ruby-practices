@@ -1,9 +1,12 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require 'set'
+
 options, file_names = ARGV.partition { |arg| arg.start_with?('-') }
 options = options.flat_map { |opt| opt[1..].chars.map { |c| "-#{c}" } }
-ls_output = ARGV.empty? && !$stdin.tty?
+
+ls_output = !$stdin.tty? && ((Set.new(options) & Set['-l', '-w', '-c']).size >= 2 || options.empty?)
 
 display_options =
   if options.empty?
@@ -26,7 +29,7 @@ end
 
 def format_count(counts, display_options, align_right, ls_output)
   %i[line word byte].filter_map do |type|
-  next unless display_options[type]
+    next unless display_options[type]
 
     count = counts[type].to_s
     if ls_output
@@ -39,8 +42,8 @@ def format_count(counts, display_options, align_right, ls_output)
   end
 end
 
-def print_count(counts, display_options = {}, file = '', multiple_files: false)
-  ls_output = display_options.values.none? && !$stdin.tty?
+def print_count(counts, display_options = {}, file = '', multiple_files: false, ls_output: false)
+  ls_output = !$stdin.tty? && (display_options.values.none? || display_options.values.all?)
   display_options = { line: true, word: true, byte: true } if ls_output
 
   align_right = display_options.values.count(true) > 1 || multiple_files
@@ -51,7 +54,7 @@ def print_count(counts, display_options = {}, file = '', multiple_files: false)
 end
 
 if file_names.empty?
-  print_count(count($stdin.read), display_options)
+  print_count(count($stdin.read), display_options, '', ls_output: ls_output)
 else
   total = { line: 0, word: 0, byte: 0 }
 
@@ -61,12 +64,12 @@ else
     if File.exist?(file)
       text = File.read(file)
       counts = count(text)
-      print_count(counts, display_options, file, multiple_files: multiple_files)
+      print_count(counts, display_options, file, multiple_files: multiple_files, ls_output: ls_output)
       total.each_key { |k| total[k] += counts[k] }
     else
       warn "#{file}: No such file"
     end
   end
 
-  print_count(total, display_options, 'total', multiple_files: multiple_files) if file_names.size > 1
+  print_count(total, display_options, 'total', multiple_files: multiple_files, ls_output: ls_output) if file_names.size > 1
 end
