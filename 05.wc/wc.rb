@@ -24,17 +24,16 @@ def count(text)
 end
 
 def print_count(counts, display_options = {}, file = '')
-  output = []
-  %i[line word byte].each do |type|
-    output << counts[type] if display_options[type]
-  end
-  output << file unless file.empty?
+  only_one = display_options.values.count(true) == 1
 
-  if display_options.values.count(true) == 1
-    puts output.join(' ')
-  else
-    puts "     #{output.join('     ')}"
+  output = %i[line word byte].filter_map do |type|
+    if display_options[type]
+      only_one ? counts[type].to_s : counts[type].to_s.rjust(3)
+    end
   end
+
+  output << file unless file.empty?
+  puts output.join(' ')
 end
 
 if file_names.empty?
