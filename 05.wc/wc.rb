@@ -31,14 +31,14 @@ def format_count(counts, display_options, align_right, ls_output)
   %i[line word byte].filter_map do |type|
     next unless display_options[type]
 
-    count = counts[type].to_s
-    if ls_output
-      count.rjust(7)
-    elsif align_right
-      count.rjust(3)
-    else
-      count
-    end
+    count = counts[type].to_s.rjust(7)
+    # if ls_output
+    #   count.rjust(7)
+    # elsif align_right
+    #   count.rjust(3)
+    # else
+    #   count
+    # end
   end
 end
 
