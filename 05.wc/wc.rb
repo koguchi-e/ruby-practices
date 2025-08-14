@@ -27,49 +27,36 @@ def count(text)
   }
 end
 
-def format_count(counts, display_options, align_right, ls_output)
+def format_count(counts, display_options)
   %i[line word byte].filter_map do |type|
     next unless display_options[type]
 
-    count = counts[type].to_s.rjust(7)
-    # if ls_output
-    #   count.rjust(7)
-    # elsif align_right
-    #   count.rjust(3)
-    # else
-    #   count
-    # end
+    counts[type].to_s.rjust(7)
   end
 end
 
-def print_count(counts, display_options = {}, file = '', multiple_files: false, ls_output: false)
-  ls_output = !$stdin.tty? && (display_options.values.none? || display_options.values.all?)
-  display_options = { line: true, word: true, byte: true } if ls_output
+def print_count(counts, display_options = {}, file = '')
+  display_options = { line: true, word: true, byte: true } if !$stdin.tty? && (display_options.values.none? || display_options.values.all?)
 
-  align_right = display_options.values.count(true) > 1 || multiple_files
-
-  output = format_count(counts, display_options, align_right, ls_output)
+  output = format_count(counts, display_options)
   output << file unless file.empty?
   puts output.join(' ')
 end
 
 if file_names.empty?
-  print_count(count($stdin.read), display_options, '', ls_output: ls_output)
+  print_count(count($stdin.read), display_options, '')
 else
   total = { line: 0, word: 0, byte: 0 }
-
-  multiple_files = file_names.size > 1
-
   file_names.each do |file|
     if File.exist?(file)
       text = File.read(file)
       counts = count(text)
-      print_count(counts, display_options, file, multiple_files: multiple_files, ls_output: ls_output)
+      print_count(counts, display_options, file)
       total.each_key { |k| total[k] += counts[k] }
     else
       warn "#{file}: No such file"
     end
   end
 
-  print_count(total, display_options, 'total', multiple_files: multiple_files, ls_output: ls_output) if file_names.size > 1
+  print_count(total, display_options, 'total') if file_names.size > 1
 end
