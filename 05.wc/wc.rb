@@ -25,7 +25,11 @@ def count(text)
   }
 end
 
-ls_output = !$stdin.tty? && ((Set.new(options) & Set['-l', '-w', '-c']).size >= 2 || display_options.values.none? || display_options.values.all?)
+def ls_output?(display_options)
+  display_options.values.all?
+end
+
+ls_output = !$stdin.tty? && ls_output?(display_options)
 
 def print_count(counts, display_options = {}, file = '', multiple_files: false, ls_output: false)
   align_width_three = display_options.values.count(true) > 1 || multiple_files
