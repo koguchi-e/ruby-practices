@@ -28,20 +28,20 @@ end
 ls_output = !$stdin.tty? && ((Set.new(options) & Set['-l', '-w', '-c']).size >= 2 || display_options.values.none? || display_options.values.all?)
 
 def print_count(counts, display_options = {}, file = '', multiple_files: false, ls_output: false)
-  align_right = display_options.values.count(true) > 1 || multiple_files
-  output = format_count(counts, display_options, align_right, ls_output)
+  align_width_three = display_options.values.count(true) > 1 || multiple_files
+  output = format_count(counts, display_options, align_width_three, ls_output)
   output << file unless file.empty?
   puts output.join(' ')
 end
 
-def format_count(counts, display_options, align_right, ls_output)
+def format_count(counts, display_options, align_width_three, ls_output)
   %i[line word byte].filter_map do |type|
     next unless display_options[type]
 
     count = counts[type].to_s
     if ls_output
       count.rjust(7)
-    elsif align_right
+    elsif align_width_three
       count.rjust(3)
     else
       count
