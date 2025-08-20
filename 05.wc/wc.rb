@@ -25,51 +25,49 @@ def count(text)
   }
 end
 
-def ls_output?(display_options)
-  display_options.values.all?
+def calc_align_width(display_options, files_given, stdin_used)
+  if stdin_used && display_options.values.all?
+    7
+  elsif display_options.values.count(true) > 1 || files_given
+    3
+  else
+    0
+  end
 end
 
-ls_output = !$stdin.tty? && ls_output?(display_options)
+def format_count(counts, display_options, align_width)
+  %i[line word byte].filter_map do |type|
+    next unless display_options[type]
+    count = counts[type].to_s
+    align_width > 0 ? count.rjust(align_width) : count
+  end
+end
 
-def print_count(counts, display_options = {}, file = '', multiple_files: false, ls_output: false)
-  align_width_three = display_options.values.count(true) > 1 || multiple_files
-  output = format_count(counts, display_options, align_width_three, ls_output)
+def print_count(counts, display_options = {}, file = '', align_width: 0)
+  output = format_count(counts, display_options, align_width)
   output << file unless file.empty?
   puts output.join(' ')
 end
 
-def format_count(counts, display_options, align_width_three, ls_output)
-  %i[line word byte].filter_map do |type|
-    next unless display_options[type]
-
-    count = counts[type].to_s
-    if ls_output
-      count.rjust(7)
-    elsif align_width_three
-      count.rjust(3)
-    else
-      count
-    end
-  end
-end
+stdin_used = !$stdin.tty?
+files_given = file_names.size > 1
+align_width = calc_align_width(display_options, files_given, stdin_used)
 
 if file_names.empty?
-  print_count(count($stdin.read), display_options, '', ls_output: ls_output)
+  print_count(count($stdin.read), display_options, '', align_width: align_width)
 else
   total = { line: 0, word: 0, byte: 0 }
-
-  multiple_files = file_names.size > 1
 
   file_names.each do |file|
     if File.exist?(file)
       text = File.read(file)
       counts = count(text)
-      print_count(counts, display_options, file, multiple_files: multiple_files, ls_output: ls_output)
+      print_count(counts, display_options, file, align_width: align_width)
       total.each_key { |k| total[k] += counts[k] }
     else
       warn "#{file}: No such file"
     end
   end
 
-  print_count(total, display_options, 'total', multiple_files: multiple_files, ls_output: ls_output) if file_names.size > 1
+  print_count(total, display_options, 'total', align_width: align_width) if file_names.size > 1
 end
