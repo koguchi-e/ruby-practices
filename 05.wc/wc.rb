@@ -26,20 +26,21 @@ def count(text)
 end
 
 def calc_align_width(display_options, files_given, stdin_used)
-  if stdin_used && display_options.values.all?
+  if display_options.values.count(true) == 1
+    0
+  elsif stdin_used
     7
   elsif display_options.values.count(true) > 1 || files_given
     3
-  else
-    0
   end
 end
 
 def format_count(counts, display_options, align_width)
   %i[line word byte].filter_map do |type|
     next unless display_options[type]
+
     count = counts[type].to_s
-    align_width > 0 ? count.rjust(align_width) : count
+    align_width.positive? ? count.rjust(align_width) : count
   end
 end
 
