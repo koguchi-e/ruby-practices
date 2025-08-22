@@ -25,15 +25,8 @@ def count(text)
   }
 end
 
-def calc_align_width(display_options, files_given, stdin_used)
-  if display_options.values.count(true) == 1
-    0
-  elsif stdin_used
-    7
-  elsif display_options.values.count(true) > 1 || files_given
-    3
-  end
-end
+stdin_used = !$stdin.tty?
+files_given = file_names.size > 1
 
 def format_count(counts, display_options, align_width)
   %i[line word byte].filter_map do |type|
@@ -50,13 +43,11 @@ def print_count(counts, display_options = {}, file = '', align_width: 0)
   puts output.join(' ')
 end
 
-stdin_used = !$stdin.tty?
-files_given = file_names.size > 1
-align_width = calc_align_width(display_options, files_given, stdin_used)
-
 if file_names.empty?
+  align_width = stdin_used && display_options.values.all? ? 7 : 0
   print_count(count($stdin.read), display_options, '', align_width: align_width)
 else
+  align_width = display_options.values.count(true) > 1 || files_given ? 3 : 0
   total = { line: 0, word: 0, byte: 0 }
 
   file_names.each do |file|
