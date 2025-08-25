@@ -25,6 +25,7 @@
 05.wc/file1.txt
 05.wc/file2.txt
 05.wc/file3.txt
+05.wc/test_wc.sh
 
 # Used by dotenv library to load environment variables.
 # .env
