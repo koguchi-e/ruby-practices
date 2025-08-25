@@ -19,28 +19,54 @@ def permission_string(mode)
   file_type + perms
 end
 
+def calc_column_widths(files)
+  {
+    link: files.map { |f| File.stat(f).nlink.to_s.size }.max,
+    user: files.map { |f| Etc.getpwuid(File.stat(f).uid).name.size }.max,
+    group: files.map { |f| Etc.getgrgid(File.stat(f).gid).name.size }.max,
+    size: files.map { |f| File.stat(f).size.to_s.size }.max
+  }
+end
+
+def print_ls_line(info)
+  link_str  = info[:link].to_s.rjust(info[:widths][:link])
+  user_str  = info[:user].ljust(info[:widths][:user])
+  group_str = info[:group].ljust(info[:widths][:group])
+  size_str  = info[:size].to_s.rjust(info[:widths][:size])
+
+  puts format(
+    '%<perm>s %<link>s %<user>s %<group>s %<size>s %<time>s %<name>s',
+    perm: info[:perm],
+    link: link_str,
+    user: user_str,
+    group: group_str,
+    size: size_str,
+    time: info[:time],
+    name: info[:name]
+  )
+end
+
 def show_list_format(files)
   puts "total #{calc_total_blocks(files)}"
+  widths = calc_column_widths(files)
 
   files.each do |file|
     stat = File.stat(file)
     mode = stat.mode
-    link = stat.nlink
-    user = Etc.getpwuid(stat.uid).name
-    group = Etc.getgrgid(stat.gid).name
-    size = stat.size
-    time = stat.mtime.strftime('%b %e %H:%M')
     perm = permission_string(mode)
+    time = stat.mtime.strftime('%b %e %H:%M')
     name = file
 
-    printf "%<perm>s %<link>2d %<user>-8s %<group>-8s %<size>4d %<time>s %<name>s\n",
-           perm:,
-           link:,
-           user:,
-           group:,
-           size:,
-           time:,
-           name:
+    print_ls_line(
+      perm: perm,
+      link: stat.nlink,
+      user: Etc.getpwuid(stat.uid).name,
+      group: Etc.getgrgid(stat.gid).name,
+      size: stat.size,
+      time: time,
+      name: name,
+      widths: widths
+    )
   end
 end
 
