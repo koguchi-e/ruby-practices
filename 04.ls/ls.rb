@@ -110,3 +110,4 @@ if show_list
 else
   show_column_format(files)
 end
+
