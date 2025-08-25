@@ -33,7 +33,7 @@ def format_count(counts, display_options, align_width)
     next unless display_options[type]
 
     count = counts[type].to_s
-    align_width.positive? ? count.rjust(align_width) : count
+    count.rjust(align_width)
   end
 end
 
