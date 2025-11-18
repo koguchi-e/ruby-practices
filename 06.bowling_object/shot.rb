@@ -2,6 +2,7 @@
 
 class Shot
   def read
-    ARGV[0].chars
+    score = ARGV[0]
+    score.split(',')
   end
 end
