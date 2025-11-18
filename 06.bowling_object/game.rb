@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Game
-  def write(scores)
+  def calculate(scores)
     index = 0
 
     point = 10.times.sum do
