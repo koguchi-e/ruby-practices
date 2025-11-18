@@ -9,7 +9,8 @@ class Bowling
   def play
     shots = Shot.new.read
     scores = Frame.new.mapping(shots)
-    Game.new.calculate(scores)
+    points = Game.new.calculate_sum(scores)
+    puts points
   end
 end
 
