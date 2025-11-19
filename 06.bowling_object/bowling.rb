@@ -8,10 +8,12 @@ require_relative './game'
 class Bowling
   def play
     shots = Shot.new.read
-    scores = Frame.new.mapping(shots)
-    points = Game.new.calculate_sum(scores)
-    puts points
+    frames = Frame.new.mapping(shots).calculate_score
+    points = Game.new.calculate_sum(frames)
+    points
   end
 end
 
-Bowling.new.play
+if __FILE__ == $0
+  Bowling.new.play
+end

@@ -2,14 +2,8 @@
 
 class Frame
   def mapping(shots)
-    shots.map { |s| s == 'X' ? 10 : s.to_i }
-  end
-  
-  def calculate_index(shots)
-    index = 0
-    @shot = scores[index]
-    @next_shot1 = scores[index + 1]
-    @next_shot2 = scores[index + 2]
+    @frame = shots.map { |s| s == 'X' ? 10 : s.to_i }
+    self
   end
 
   def strike?
@@ -24,13 +18,24 @@ class Frame
     @next_shot1 + @next_shot2
   end
 
-  def calculate_score(shots)
-    if strike
-      @shot + @next_shot1 + @next_shot2
-    elsif spare
-      @shot + @next_shot1 + @next_shot2
-    else
-      @shot + @next_shot1
+  def calculate_score
+    index = 0
+
+    10.times.sum do
+      @shot = @frame[index]
+      @next_shot1 = @frame[index + 1]
+      @next_shot2 = @frame[index + 2]
+
+      frame_score =
+        if strike? || spare?
+          @shot + @next_shot1 + @next_shot2
+        else
+          @shot + @next_shot1
+        end
+
+      index += (strike? ? 1 : 2)
+
+      frame_score
     end
   end
 end

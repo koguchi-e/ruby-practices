@@ -2,6 +2,6 @@
 
 class Game
   def calculate_sum(frames)
-    frames.sum
+    frames
   end
 end
