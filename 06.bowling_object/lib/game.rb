@@ -7,11 +7,8 @@ require_relative './frame'
 class Game
   def play
     shots = Shot.new.transforme
-    points = Frame.new.calculate_score(shots)
-    points
+    Frame.new.calculate_score(shots)
   end
 end
 
-if __FILE__ == $0
-  Game.new.play
-end
+Game.new.play if __FILE__ == $PROGRAM_NAME
