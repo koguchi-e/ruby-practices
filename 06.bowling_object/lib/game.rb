@@ -6,8 +6,7 @@ require_relative './frame'
 
 class Game
   def play
-    shots = Shot.new.read
-    shots = Shot.new.mapping(shots)
+    shots = Shot.new.transforme
     points = Frame.new.calculate_score(shots)
     points
   end

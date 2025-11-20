@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
 class Shot
-  def read
-    shots = ARGV[0].split(',')
+  def transforme
+    read.map { |s| s == 'X' ? 10 : s.to_i }
   end
-  def mapping(shots)
-    shots.map { |s| s == 'X' ? 10 : s.to_i }
+
+  private
+
+  def read
+    ARGV[0].split(',')
   end
 end
