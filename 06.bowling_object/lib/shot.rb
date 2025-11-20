@@ -2,6 +2,9 @@
 
 class Shot
   def read
-    ARGV[0].split(',')
+    shots = ARGV[0].split(',')
+  end
+  def mapping(shots)
+    shots.map { |s| s == 'X' ? 10 : s.to_i }
   end
 end
