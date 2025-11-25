@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 class Shot
-  def transforme
-    ARGV[0].split(',').map { |s| s == 'X' ? 10 : s.to_i }
+  def initialize(shot)
+    @shot = shot
+  end
+  def counting_hit
+    @shot = 
   end
 end
