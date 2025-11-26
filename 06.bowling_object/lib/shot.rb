@@ -4,7 +4,7 @@ class Shot
   def initialize(shot)
     @shot = shot
   end
-  def counting_hit
-    @shot = 
+  def score
+    @shot
   end
 end
