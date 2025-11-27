@@ -51,7 +51,7 @@ class Game
   end
 
   def calculate_total_score
-    total_score = @frames.each_with_index.sum do |frame, index|
+    @total_score = @frames.each_with_index.sum do |frame, index|
       frame.frame_score + bonus(index)
     end
   end
@@ -61,6 +61,5 @@ if __FILE__ == $0
   game = Game.new
   game.make_shots
   game.make_frames
-  game.calculate_total_score
-  puts total_score
+  puts game.calculate_total_score
 end
