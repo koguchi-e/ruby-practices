@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
 class Frame
-  def initialize(shot1, shot2)
-    @shot1 = shot1
-    @shot2 = shot2
+  def initialize(*shots)
+    @shots = shots
   end
 
   def strike?
-    @shot1.score == 10
+    @shots.length == 1 && @shots[0].score == 10
   end
 
   def spare?
-    @shot1.score + @shot2.score == 10
+    @shots.length >= 2 && 
+    @shots[0].score + @shots[1].score == 10
   end
 
   def frame_score
-    @shot1.score + @shot2.score
+    @shots.map(&:score).sum
   end
 end
