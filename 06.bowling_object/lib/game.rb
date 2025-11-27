@@ -62,5 +62,5 @@ if __FILE__ == $0
   game.make_shots
   game.make_frames
   game.calculate_total_score
-  puts calculate_total_score
+  puts total_score
 end
