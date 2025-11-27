@@ -10,8 +10,7 @@ class Frame
   end
 
   def spare?
-    @shots.length >= 2 && 
-    @shots[0].score + @shots[1].score == 10
+    @shots.length >= 2 && @shots[0].score + @shots[1].score == 10
   end
 
   def frame_score

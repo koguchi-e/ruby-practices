@@ -10,6 +10,7 @@ class Game
     @frames = []
     @frame_first_shot_index = []
   end
+
   def make_shots
     input_value = ARGV[0].split(',').map { |s| s == 'X' ? 10 : s.to_i }
     @shots = input_value.map { |pin| Shot.new(pin) }
@@ -25,12 +26,12 @@ class Game
         @frames << Frame.new(@shots[i])
         i += 1
       else
-        @frames << Frame.new(@shots[i], @shots[i+1])
+        @frames << Frame.new(@shots[i], @shots[i + 1])
         i += 2
       end
     end
     @frame_first_shot_index << i
-    last_shots = @shots[i..-1]
+    last_shots = @shots[i..]
     last_frame = Frame.new(*last_shots)
     @frames << last_frame
   end
@@ -42,11 +43,11 @@ class Game
     frame = @frames[frame_index]
 
     if frame.strike?
-      return @shots[start + 1].score + @shots[start + 2].score
+      @shots[start + 1].score + @shots[start + 2].score
     elsif frame.spare?
-      return @shots[start + 2].score
+      @shots[start + 2].score
     else
-      return 0
+      0
     end
   end
 
@@ -57,7 +58,7 @@ class Game
   end
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
   game = Game.new
   game.make_shots
   game.make_frames
