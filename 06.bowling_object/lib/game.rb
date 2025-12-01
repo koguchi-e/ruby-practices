@@ -42,18 +42,37 @@ class Game
     start = @frame_first_shot_index[frame_index]
     frame = @frames[frame_index]
 
-    if frame.strike?
-      @shots[start + 1].score + @shots[start + 2].score
-    elsif frame.spare?
-      @shots[start + 2].score
-    else
-      0
-    end
+    next_shot1 = @shots[start + 1].score
+    next_shot2 = @shots[start + 2].score
+
+    # if frame.strike?
+    #   @shots[start + 1].score + @shots[start + 2].score
+    # elsif frame.spare?
+    #   @shots[start + 2].score
+    # else
+    #   0
+    # end
   end
 
   def calculate_total_score
     @total_score = @frames.each_with_index.sum do |frame, index|
-      frame.frame_score + bonus(index)
+      if index == 9
+        frame.frame_score
+      else
+        next_shot_index = @frame_first_shot_index[index + 1]
+        frame = @frames[index]
+
+        if frame.strike?
+          next_shot1 = @shots[next_shot_index].score
+          next_shot2 = @shots[next_shot_index + 1].score
+        elsif frame.spare?
+          next_shot1 = @shots[next_shot_index].score
+        else
+          0
+        end
+
+        frame.total_score(next_shot1, next_shot2)
+      end
     end
   end
 end
