@@ -19,21 +19,10 @@ class Frame
 
   def total_score(next_shot1, next_shot2)
     if strike?
-      pp "フレーム#{frame_score}"
-      pp "ストライク+#{next_shot1}+#{next_shot2}"
-
       @total_score = frame_score + next_shot1 + next_shot2
-
-      pp @total_score
     elsif spare?
-      pp "フレーム#{frame_score}"
-      pp "スペア+#{next_shot1}"
-
       @total_score = frame_score + next_shot1
-
-      pp @total_score
     else
-      pp "フレーム#{frame_score}"
       frame_score
     end
   end
