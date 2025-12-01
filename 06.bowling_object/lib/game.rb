@@ -26,7 +26,7 @@ class Game
         @frames << Frame.new(@shots[i])
         i += 1
       else
-        @frames << Frame.new(@shots[i], @shots[i + 1])
+        @frames << Frame.new(*@shots[i..(i + 1)])
         i += 2
       end
     end
@@ -34,24 +34,6 @@ class Game
     last_shots = @shots[i..]
     last_frame = Frame.new(*last_shots)
     @frames << last_frame
-  end
-
-  def bonus(frame_index)
-    return 0 if frame_index == 9
-
-    start = @frame_first_shot_index[frame_index]
-    frame = @frames[frame_index]
-
-    next_shot1 = @shots[start + 1].score
-    next_shot2 = @shots[start + 2].score
-
-    # if frame.strike?
-    #   @shots[start + 1].score + @shots[start + 2].score
-    # elsif frame.spare?
-    #   @shots[start + 2].score
-    # else
-    #   0
-    # end
   end
 
   def calculate_total_score
