@@ -17,9 +17,10 @@ class Frame
   end
 
   def strike_bonus
-    return 0 if next_frame.nil?
-
-    next_frame.shots[0].score + next_frame.shots[1].score
+    shots = []
+    shots += next_frame.shots if next_frame
+    shots += next_frame.next_frame.shots if next_frame&.next_frame
+    shots.map(&:score).first(2).sum
   end
 
   def spare_bonus
@@ -28,11 +29,17 @@ class Frame
     next_frame.shots[0].score
   end
 
+  def final_frame?
+    next_frame.nil?
+  end
+
   def frame_score
     @shots.map(&:score).sum
   end
 
   def total_score
+    return shots.sum(&:score) if final_frame?
+
     if strike?
       @total_score = 10 + strike_bonus
     elsif spare?

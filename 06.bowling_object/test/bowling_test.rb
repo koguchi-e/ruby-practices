@@ -16,8 +16,8 @@ class GameTest < Minitest::Test
   def run_game(arg)
     ARGV.replace([arg])
     game = Game.new
-    game.make_shots
     game.make_frames
+    game.link_frames
     game.calculate_total_score
   end
 

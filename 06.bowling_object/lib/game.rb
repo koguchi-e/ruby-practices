@@ -24,7 +24,7 @@ class Game
       end
     end
 
-    @frames << Frame.new(input_values[i..])
+    @frames << Frame.new(input_values[i, 3].compact)
   end
 
   def link_frames
