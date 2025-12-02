@@ -6,62 +6,41 @@ require_relative './frame'
 
 class Game
   def initialize
-    @shots = []
     @frames = []
-    @frame_first_shot_index = []
-  end
-
-  def make_shots
-    input_value = ARGV[0].split(',')
-    @shots = input_value.map { |pin| Shot.new(pin) }
   end
 
   def make_frames
+    input_values = ARGV[0].split(',')
+
     i = 0
 
-    while @frames.length < 9
-      @frame_first_shot_index << i
-
-      if @shots[i].score == 10
-        @frames << Frame.new(@shots[i])
+    9.times do
+      if input_values[i] == 'X'
+        @frames << Frame.new([input_values[i]])
         i += 1
       else
-        @frames << Frame.new(*@shots[i..(i + 1)])
+        @frames << Frame.new([input_values[i], input_values[i + 1]])
         i += 2
       end
     end
-    @frame_first_shot_index << i
-    last_shots = @shots[i..]
-    last_frame = Frame.new(*last_shots)
-    @frames << last_frame
+
+    @frames << Frame.new(input_values[i..])
+  end
+
+  def link_frames
+    @frames.each_cons(2) do |current, nxt|
+      current.next_frame = nxt
+    end
   end
 
   def calculate_total_score
-    @total_score = @frames.each_with_index.sum do |frame, index|
-      if index == 9
-        frame.frame_score
-      else
-        next_shot_index = @frame_first_shot_index[index + 1]
-        frame = @frames[index]
-
-        if frame.strike?
-          next_shot1 = @shots[next_shot_index].score
-          next_shot2 = @shots[next_shot_index + 1].score
-        elsif frame.spare?
-          next_shot1 = @shots[next_shot_index].score
-        else
-          0
-        end
-
-        frame.total_score(next_shot1, next_shot2)
-      end
-    end
+    @frames.sum(&:total_score)
   end
 end
 
 if __FILE__ == $PROGRAM_NAME
   game = Game.new
-  game.make_shots
   game.make_frames
+  game.link_frames
   puts game.calculate_total_score
 end
