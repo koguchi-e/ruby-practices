@@ -12,7 +12,7 @@ class Game
   end
 
   def make_shots
-    input_value = ARGV[0].split(',').map { |s| s == 'X' ? 10 : s.to_i }
+    input_value = ARGV[0].split(',')
     @shots = input_value.map { |pin| Shot.new(pin) }
   end
 

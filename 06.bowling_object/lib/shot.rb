@@ -6,6 +6,10 @@ class Shot
   end
 
   def score
-    @shot
+    if @shot == 'X'
+      return 10
+    else
+      @shot.to_i
+    end
   end
 end
