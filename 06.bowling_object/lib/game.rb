@@ -12,7 +12,7 @@ class Game
   def run
     make_frames
     link_frames
-    puts calculate_total_score
+    calculate_total_score
   end
 
   def make_frames
@@ -47,5 +47,6 @@ class Game
 end
 
 if __FILE__ == $PROGRAM_NAME
-  Game.new.run
+  game = Game.new
+  puts game.run
 end
