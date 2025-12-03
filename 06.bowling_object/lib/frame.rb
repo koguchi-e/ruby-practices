@@ -27,13 +27,14 @@ class Frame
   def total_score
     return shots.sum(&:score) if final_frame?
 
-    if strike?
-      @total_score = 10 + strike_bonus
-    elsif spare?
-      @total_score = 10 + spare_bonus
-    else
-      frame_score
-    end
+    frame_score +
+      if strike?
+        strike_bonus
+      elsif spare?
+        spare_bonus
+      else
+        0
+      end
   end
 
   private
