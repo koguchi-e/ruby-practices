@@ -16,19 +16,6 @@ class Frame
     @shots.length >= 2 && @shots[0..1].map(&:score).sum == 10
   end
 
-  def strike_bonus
-    shots = []
-    shots += next_frame.shots if next_frame
-    shots += next_frame.next_frame.shots if next_frame&.next_frame
-    shots.map(&:score).first(2).sum
-  end
-
-  def spare_bonus
-    return 0 if next_frame.nil?
-
-    next_frame.shots[0].score
-  end
-
   def final_frame?
     next_frame.nil?
   end
@@ -47,5 +34,20 @@ class Frame
     else
       frame_score
     end
+  end
+
+  private
+
+  def strike_bonus
+    shots = []
+    shots += next_frame.shots if next_frame
+    shots += next_frame.next_frame.shots if next_frame&.next_frame
+    shots.map(&:score).first(2).sum
+  end
+
+  def spare_bonus
+    return 0 if next_frame.nil?
+
+    next_frame.shots[0].score
   end
 end
