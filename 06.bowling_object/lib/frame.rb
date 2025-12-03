@@ -9,25 +9,25 @@ class Frame
   end
 
   def strike?
-    @shots.length == 1 && @shots[0].score == 10
+    @shots.length == 1 && @shots[0].hit_pins == 10
   end
 
   def spare?
-    @shots.length >= 2 && @shots[0..1].map(&:score).sum == 10
+    @shots.length >= 2 && @shots[0..1].map(&:hit_pins).sum == 10
   end
 
   def final_frame?
     next_frame.nil?
   end
 
-  def frame_score
-    @shots.map(&:score).sum
+  def score
+    @shots.map(&:hit_pins).sum
   end
 
   def total_score
-    return shots.sum(&:score) if final_frame?
+    return shots.sum(&:hit_pins) if final_frame?
 
-    frame_score +
+    score +
       if strike?
         strike_bonus
       elsif spare?
@@ -43,12 +43,12 @@ class Frame
     shots = []
     shots += next_frame.shots if next_frame
     shots += next_frame.next_frame.shots if next_frame&.next_frame
-    shots.map(&:score).first(2).sum
+    shots.map(&:hit_pins).first(2).sum
   end
 
   def spare_bonus
     return 0 if next_frame.nil?
 
-    next_frame.shots[0].score
+    next_frame.shots[0].hit_pins
   end
 end
