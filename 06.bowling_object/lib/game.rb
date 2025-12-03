@@ -9,6 +9,12 @@ class Game
     @frames = []
   end
 
+  def run
+    make_frames
+    link_frames
+    puts calculate_total_score
+  end
+
   def make_frames
     input_values = ARGV[0].split(',')
 
@@ -36,11 +42,10 @@ class Game
   def calculate_total_score
     @frames.sum(&:total_score)
   end
+
+  private :make_frames
 end
 
 if __FILE__ == $PROGRAM_NAME
-  game = Game.new
-  game.make_frames
-  game.link_frames
-  puts game.calculate_total_score
+  Game.new.run
 end
