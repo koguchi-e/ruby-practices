@@ -15,7 +15,7 @@ class GameTest < Minitest::Test
 
   def run_game(arg)
     ARGV.replace([arg])
-    Game.new.run
+    Game.new.calculate_total_score
   end
 
   def test_case1
