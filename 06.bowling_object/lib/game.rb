@@ -17,7 +17,23 @@ class Game
 
   private
 
+  def make_frames
+    input_values = ARGV[0].split(',')
 
+    i = 0
+
+    9.times do
+      if input_values[i] == 'X'
+        @frames << Frame.new([input_values[i]])
+        i += 1
+      else
+        @frames << Frame.new([input_values[i], input_values[i + 1]])
+        i += 2
+      end
+    end
+
+    @frames << Frame.new(input_values[i, 3].compact)
+  end
 
   def link_frames
     @frames.each_cons(2) do |current, nxt|
