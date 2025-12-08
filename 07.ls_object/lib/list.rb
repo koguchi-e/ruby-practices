@@ -27,18 +27,19 @@ class List
   def load_entries
     if @show_all
       @entries = Dir.entries('.')
-      puts @enties
+      @entries.sort_by!(&:downcase)
+      p @entries
     else
       @entries = Dir['*']
     end
 
     @entries.sort_by!(&:downcase)
-    puts @entries.reverse! if @show_reverse
+    p @entries.reverse! if @show_reverse
 
-    if @show_list
-      puts "total #{calc_total_blocks}"
-      entries_list = @entries.map { |name| Entry.new(name) }
-    end
+    return unless @show_list
+
+    puts "total #{calc_total_blocks}"
+    @entries.map { |name| Entry.new(name) }
   end
 
   # # -lで出す詳細情報
