@@ -26,11 +26,11 @@
 05.wc/file2.txt
 05.wc/file3.txt
 05.wc/test_wc.sh
-07.ls_object/lib/file1.txt
-07.ls_object/lib/file2.txt
-07.ls_object/lib/file3.txt
-07.ls_object/lib/Dir1
-07.ls_object/lib/Dir2
+07.ls_object/test/fixtures/file1.txt
+07.ls_object/test/fixtures/file2.txt
+07.ls_object/test/fixtures/file3.txt
+07.ls_object/test/fixtures/Dir1
+07.ls_object/test/fixtures/Dir2
 
 # Used by dotenv library to load environment variables.
 # .env
