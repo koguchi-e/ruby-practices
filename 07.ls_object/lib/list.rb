@@ -28,35 +28,42 @@ class List
     if @show_all
       @entries = Dir.entries('.')
       @entries.sort_by!(&:downcase)
-      p @entries
     else
       @entries = Dir['*']
     end
 
     @entries.sort_by!(&:downcase)
-    p @entries.reverse! if @show_reverse
+    @entries.reverse! if @show_reverse
 
-    return unless @show_list
-
-    puts "total #{calc_total_blocks}"
-    @entries.map { |name| Entry.new(name) }
+    if @show_list
+      puts "total #{calc_total_blocks}"
+      @entries.map { |name| Entry.new(name) }
+    else
+      show_column_format
+    end
   end
-
-  # # -lで出す詳細情報
-  # def show_list_format
-  #   # List は 複数の Entry を並べるだけ。
-  #   # Entry.newで一個一個のエントリを生成（Entryはファイル情報を持つ）
-  #   # それを並べて出力するだけ（mapを使う）
-  #   entries = filenames.map { |name| Entry.new(name) }
-  #   puts "total #{calc_total_blocks}"
-  #   puts entries
-  # end
 
   def calc_total_blocks
     total_files = @entries.sum do |file|
       File.exist?(file) ? File.stat(file).blocks : 0
     end
     (total_files / 2.0).ceil
+  end
+
+  def show_column_format
+    cells = 3
+    row_count = (@entries.size.to_f / cells).ceil
+    columns = Array.new(cells) { [] }
+
+    @entries.each_with_index do |file, index|
+      col = index.div(row_count)
+      columns[col] << file
+    end
+
+    row_count.times do |row_idx|
+      line = columns.map { |col| col[row_idx] || ' ' }.map { |name| name.ljust(20) }.join
+      puts line.rstrip
+    end
   end
 
   # # -l以外の表示
