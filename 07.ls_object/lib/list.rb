@@ -2,8 +2,6 @@
 # frozen_string_literal: true
 
 require_relative './entry'
-# require_relative './file'
-# require_relative './directory'
 
 require 'etc'
 
@@ -12,7 +10,6 @@ class List
     parse_options
   end
 
-  # どのオプションが true/false かを決める・解析するだけ
   def parse_options
     options = ARGV.flat_map do |argument|
       argument.start_with?('-') ? argument[1..].chars.map { |c| "-#{c}" } : argument
@@ -23,7 +20,6 @@ class List
     @show_list = options.include?('-l')
   end
 
-  # ファイル一覧を受け取る
   def load_entries
     if @show_all
       @entries = Dir.entries('.')
@@ -65,34 +61,7 @@ class List
       puts line.rstrip
     end
   end
-
-  # # -l以外の表示
-  # def show_column_format
-  #   cells = 3
-  #   row_count = (@entries.size.to_f / cells).ceil
-  #   columns = Array.new(cells) { [] }
-
-  #   @entries.each_with_index do |file, index|
-  #     col = index/ row_count
-  #     columns[col] << file
-  #   end
-
-  #   row_count.times do |row_idx|
-  #     line = columns.map { |col| col[row_idx] || ' ' }.map { |name| name.ljust(20) }.join
-  #     puts line.rstrip
-  #   end
-  # end
-
-  # 解析に基づき実行する
-  # def execute_options
-  #   if @show_list
-  #     show_list_format
-  #   else
-  #     show_column_format
-  #   end
-  # end
 end
 
-# メイン処理
 list = List.new
 list.load_entries
