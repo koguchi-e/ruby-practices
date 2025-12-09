@@ -2,45 +2,17 @@
 # frozen_string_literal: true
 
 require_relative './entry'
-
-require 'etc'
+require_relative './option'
 
 class List
   def initialize
-    parse_options
-  end
-
-  def parse_options
-    options = ARGV.flat_map do |argument|
-      argument.start_with?('-') ? argument[1..].chars.map { |c| "-#{c}" } : argument
-    end
-
-    @show_all = options.include?('-a')
-    @show_reverse = options.include?('-r')
-    @show_list = options.include?('-l')
-  end
-
-  def load_entries
-    if @show_all
-      @entries = Dir.entries('.')
-      @entries.sort_by!(&:downcase)
-    else
-      @entries = Dir['*']
-    end
-
-    @entries.sort_by!(&:downcase)
-    @entries.reverse! if @show_reverse
-
-    if @show_list
-      puts "total #{calc_total_blocks}"
-      @entries.map { |name| Entry.new(name) }
-    else
-      show_column_format
-    end
+    option = Option.new
+    @display_entries = option.load_entries
+    @option = option
   end
 
   def calc_total_blocks
-    total_files = @entries.sum do |file|
+    total_files = @display_entries.sum do |file|
       File.exist?(file) ? File.stat(file).blocks : 0
     end
     (total_files / 2.0).ceil
@@ -48,10 +20,10 @@ class List
 
   def show_column_format
     cells = 3
-    row_count = (@entries.size.to_f / cells).ceil
+    row_count = (@display_entries.size.to_f / cells).ceil
     columns = Array.new(cells) { [] }
 
-    @entries.each_with_index do |file, index|
+    @display_entries.each_with_index do |file, index|
       col = index.div(row_count)
       columns[col] << file
     end
@@ -61,7 +33,17 @@ class List
       puts line.rstrip
     end
   end
+
+  def output_list
+    if @option.show_list?
+      puts "total #{calc_total_blocks}"
+      @display_entries.map { |name| Entry.new(name) }
+    else
+      show_column_format
+    end
+  end
 end
 
+# オプションクラスを作成したが、実行部分はどう変更するか？
 list = List.new
-list.load_entries
+list.output_list

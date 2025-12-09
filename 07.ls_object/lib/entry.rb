@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'etc'
+
 class Entry
   def initialize(entry)
     @entry = entry
