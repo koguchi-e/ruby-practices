@@ -7,7 +7,7 @@ require_relative './option'
 class List
   def initialize
     option = Option.new
-    @display_entries = option.load_entries
+    @display_entries = option.sort_entries
     @option = option
   end
 
@@ -44,6 +44,5 @@ class List
   end
 end
 
-# オプションクラスを作成したが、実行部分はどう変更するか？
 list = List.new
 list.output_list

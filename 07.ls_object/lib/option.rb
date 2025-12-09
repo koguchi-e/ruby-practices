@@ -9,18 +9,6 @@ class Option
     @options = ARGV.flat_map do |argument|
       argument.start_with?('-') ? argument[1..].chars.map { |c| "-#{c}" } : argument
     end
-
-    if show_all?
-      @show_all = @options.include?('-a')
-    end
-
-    if show_reverse?
-      @show_reverse = @options.include?('-r')
-    end
-
-    if show_list?
-      @show_list = @options.include?('-l')
-    end
   end
 
   def show_all?
@@ -35,23 +23,22 @@ class Option
     @options.include?('-l')
   end
 
-  def load_entries
-    if @show_all
-      @entries = Dir.entries('.')
-      sort_entries
-    else
-      @entries = Dir['*']
-      sort_entries
-      reverse_entries
-    end
+  def sort_entries
+    load_entries
+    @entries.sort_by!(&:downcase)
+    reverse_entries
     @entries
   end
 
-  def sort_entries
-    @entries.sort_by!(&:downcase)
+  def load_entries
+    @entries = if show_all?
+                 Dir.entries('.')
+               else
+                 Dir['*']
+               end
   end
 
   def reverse_entries
-    @entries.reverse! if @show_reverse
+    @entries.reverse! if show_reverse?
   end
 end
