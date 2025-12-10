@@ -30,6 +30,8 @@ class Option
     @entries
   end
 
+  private
+
   def load_entries
     @entries = if show_all?
                  Dir.entries('.')
