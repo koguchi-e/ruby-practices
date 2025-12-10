@@ -5,12 +5,6 @@ class Option
     parse_options
   end
 
-  def parse_options
-    @options = ARGV.flat_map do |argument|
-      argument.start_with?('-') ? argument[1..].chars.map { |c| "-#{c}" } : argument
-    end
-  end
-
   def show_all?
     @options.include?('-a')
   end
@@ -31,6 +25,12 @@ class Option
   end
 
   private
+
+  def parse_options
+    @options = ARGV.flat_map do |argument|
+      argument.start_with?('-') ? argument[1..].chars.map { |c| "-#{c}" } : argument
+    end
+  end
 
   def load_entries
     @entries = if show_all?

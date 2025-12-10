@@ -11,6 +11,19 @@ class List
     @option = option
   end
 
+  def output_list
+    if @option.show_list?
+      puts "total #{calc_total_blocks}"
+      @display_entries.each do |name|
+        puts Entry.new(name).entry_information
+      end
+    else
+      show_column_format
+    end
+  end
+
+  private
+
   def calc_total_blocks
     total_files = @display_entries.sum do |file|
       File.exist?(file) ? File.stat(file).blocks : 0
@@ -31,17 +44,6 @@ class List
     row_count.times do |row_idx|
       line = columns.map { |col| col[row_idx] || ' ' }.map { |name| name.ljust(20) }.join
       puts line.rstrip
-    end
-  end
-
-  def output_list
-    if @option.show_list?
-      puts "total #{calc_total_blocks}"
-      @display_entries.each do |name|
-        puts Entry.new(name).entry_information
-      end
-    else
-      show_column_format
     end
   end
 end
