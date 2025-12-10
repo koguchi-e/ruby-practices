@@ -37,7 +37,9 @@ class List
   def output_list
     if @option.show_list?
       puts "total #{calc_total_blocks}"
-      @display_entries.map { |name| Entry.new(name) }
+      @display_entries.each do |name|
+        puts Entry.new(name).entry_information
+      end
     else
       show_column_format
     end

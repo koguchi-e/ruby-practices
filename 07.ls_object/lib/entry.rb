@@ -34,13 +34,13 @@ class Entry
     time = stat.mtime.strftime('%b %e %H:%M')
     perm = permission_string(mode)
     name = @entry
-    printf "%<perm>s %<link>2d %<user>-8s %<group>-8s %<size>4d %<time>s %<name>s\n",
+    format("%<perm>s %<link>2d %<user>-8s %<group>-8s %<size>4d %<time>s %<name>s\n",
            perm:,
            link:,
            user:,
            group:,
            size:,
            time:,
-           name:
+           name:)
   end
 end
