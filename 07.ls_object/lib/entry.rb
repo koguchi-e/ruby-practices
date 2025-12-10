@@ -5,7 +5,6 @@ require 'etc'
 class Entry
   def initialize(entry)
     @entry = entry
-    entry_information
   end
 
   def entry_information
