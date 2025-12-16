@@ -76,10 +76,10 @@ class List
     file_type + perms
   end
 
+  CELLS = 3
   def show_column_format
-    cells = 3
-    row_count = (@entries.size.to_f / cells).ceil
-    columns = Array.new(cells) { [] }
+    row_count = (@entries.size.to_f / CELLS).ceil
+    columns = Array.new(CELLS) { [] }
 
     @entries.each_with_index do |file, index|
       col = index.div(row_count)
