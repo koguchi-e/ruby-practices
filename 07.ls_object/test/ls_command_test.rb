@@ -67,7 +67,7 @@ class LsCommandTest < Minitest::Test
 
   def test_al
     expected = <<~TEXT
-      total 28
+      total 20
       drwxr-xr-x  4 koguchi  koguchi  4096 Dec  9 16:43 .
       drwxr-xr-x  3 koguchi  koguchi  4096 Dec 16 13:52 ..
       drwxr-xr-x  2 koguchi  koguchi  4096 Dec  8 14:39 Dir1
@@ -81,7 +81,7 @@ class LsCommandTest < Minitest::Test
 
   def test_rl
     expected = <<~TEXT
-      total 28
+      total 20
       -rw-r--r--  1 koguchi  koguchi   102 Dec  8 14:38 file3.txt
       -rw-r--r--  1 koguchi  koguchi   102 Dec  8 14:36 file2.txt
       -rw-r--r--  1 koguchi  koguchi   101 Dec  8 14:36 file1.txt
@@ -95,7 +95,7 @@ class LsCommandTest < Minitest::Test
 
   def test_alr
     expected = <<~TEXT
-      total 28
+      total 20
       -rw-r--r--  1 koguchi  koguchi   102 Dec  8 14:38 file3.txt
       -rw-r--r--  1 koguchi  koguchi   102 Dec  8 14:36 file2.txt
       -rw-r--r--  1 koguchi  koguchi   101 Dec  8 14:36 file1.txt

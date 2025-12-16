@@ -7,15 +7,15 @@ require_relative './option'
 class LsCommand
   def initialize
     @option = Option.new
-    load_entries
+    @load_entries = load_entries
   end
 
   def output_list
     if @option.show_long?
       puts "total #{calc_total_blocks}"
-      @entries.each do |name|
-        @metadata = FileMetadata.new(name)
-        puts format_long_line
+      @load_entries.each do |name|
+        metadata = FileMetadata.new(name)
+        puts format_long_line(metadata)
       end
     else
       show_column_format
@@ -25,30 +25,31 @@ class LsCommand
   private
 
   def load_entries
-    @entries = if @option.show_all?
-                 Dir.entries('.')
-               else
-                 Dir['*']
-               end
-    @entries.sort_by!(&:downcase)
-    @entries.reverse! if @option.show_reverse?
+    entries = if @option.show_all?
+                Dir.entries('.')
+              else
+                Dir['*']
+              end
+    entries.sort_by!(&:downcase)
+    entries.reverse! if @option.show_reverse?
+    entries
   end
 
   def calc_total_blocks
-    total_files = @entries.sum do |file|
+    total_files = @load_entries.sum do |file|
       File.exist?(file) ? File.stat(file).blocks : 0
     end
     (total_files / 2.0).ceil
   end
 
-  def format_long_line
-    link = @metadata.link
-    user = @metadata.user_name
-    group = @metadata.user_group
-    size = @metadata.file_size
-    time = @metadata.time_stamp
-    perm = permission_string
-    name = @metadata.name
+  def format_long_line(metadata)
+    link = metadata.link
+    user = metadata.user_name
+    group = metadata.user_group
+    size = metadata.file_size
+    time = metadata.time_stamp
+    perm = permission_string(metadata)
+    name = metadata.name
     format("%<perm>s %<link>2d %<user>-8s %<group>-8s %<size>4d %<time>s %<name>s\n",
            perm:,
            link:,
@@ -59,8 +60,8 @@ class LsCommand
            name:)
   end
 
-  def permission_string
-    mode = @metadata.mode
+  def permission_string(metadata)
+    mode = metadata.mode
     file_type = case mode & 0o170000
                 when 0o040000 then 'd'
                 when 0o100000 then '-'
@@ -78,10 +79,10 @@ class LsCommand
 
   CELLS = 3
   def show_column_format
-    row_count = (@entries.size.to_f / CELLS).ceil
+    row_count = (@load_entries.size.to_f / CELLS).ceil
     columns = Array.new(CELLS) { [] }
 
-    @entries.each_with_index do |file, index|
+    @load_entries.each_with_index do |file, index|
       col = index.div(row_count)
       columns[col] << file
     end
