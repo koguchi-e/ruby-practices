@@ -2,11 +2,11 @@
 # frozen_string_literal: true
 
 require_relative './file_metadata'
-require_relative './option'
+require_relative './command_line_option'
 
 class LsCommand
   def initialize
-    @option = Option.new
+    @option = CommandLineOption.new
     @load_entries = load_entries
   end
 

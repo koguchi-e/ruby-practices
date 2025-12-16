@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
-class Option
+class CommandLineOption
   def initialize
-    parse_options
+    @options = ARGV.flat_map do |argument|
+      argument.start_with?('-') ? argument[1..].chars.map { |c| "-#{c}" } : argument
+    end
   end
 
   def show_all?
@@ -15,13 +17,5 @@ class Option
 
   def show_long?
     @options.include?('-l')
-  end
-
-  private
-
-  def parse_options
-    @options = ARGV.flat_map do |argument|
-      argument.start_with?('-') ? argument[1..].chars.map { |c| "-#{c}" } : argument
-    end
   end
 end
