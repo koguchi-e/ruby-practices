@@ -2,10 +2,10 @@
 # frozen_string_literal: true
 
 require 'minitest/autorun'
-require_relative '../lib/list'
+require_relative '../lib/ls_command'
 require 'pathname'
 
-class ListTest < Minitest::Test
+class LsCommandTest < Minitest::Test
   TEST_PATH = Pathname('./fixtures')
 
   def setup
@@ -21,7 +21,7 @@ class ListTest < Minitest::Test
 
     Dir.chdir(TEST_PATH) do
       stdout, _stderr = capture_io do
-        List.new.output_list
+        LsCommand.new.output_list
       end
       return stdout
     end
@@ -69,7 +69,7 @@ class ListTest < Minitest::Test
     expected = <<~TEXT
       total 28
       drwxr-xr-x  4 koguchi  koguchi  4096 Dec  9 16:43 .
-      drwxr-xr-x  3 koguchi  koguchi  4096 Dec  9 16:43 ..
+      drwxr-xr-x  3 koguchi  koguchi  4096 Dec 16 13:52 ..
       drwxr-xr-x  2 koguchi  koguchi  4096 Dec  8 14:39 Dir1
       drwxr-xr-x  2 koguchi  koguchi  4096 Dec  8 14:39 Dir2
       -rw-r--r--  1 koguchi  koguchi   101 Dec  8 14:36 file1.txt
@@ -81,12 +81,14 @@ class ListTest < Minitest::Test
 
   def test_rl
     expected = <<~TEXT
-      total 20
+      total 28
       -rw-r--r--  1 koguchi  koguchi   102 Dec  8 14:38 file3.txt
       -rw-r--r--  1 koguchi  koguchi   102 Dec  8 14:36 file2.txt
       -rw-r--r--  1 koguchi  koguchi   101 Dec  8 14:36 file1.txt
       drwxr-xr-x  2 koguchi  koguchi  4096 Dec  8 14:39 Dir2
       drwxr-xr-x  2 koguchi  koguchi  4096 Dec  8 14:39 Dir1
+      drwxr-xr-x  3 koguchi  koguchi  4096 Dec 16 13:52 ..
+      drwxr-xr-x  4 koguchi  koguchi  4096 Dec  9 16:43 .
     TEXT
     assert_equal expected, make_lists(['-rl'])
   end

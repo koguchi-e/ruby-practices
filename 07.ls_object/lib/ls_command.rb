@@ -1,21 +1,21 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require_relative './filemetadata'
+require_relative './file_metadata'
 require_relative './option'
 
-class List
+class LsCommand
   def initialize
     @option = Option.new
     load_entries
   end
 
   def output_list
-    if @option.show_list?
+    if @option.show_long?
       puts "total #{calc_total_blocks}"
       @entries.each do |name|
         @metadata = FileMetadata.new(name)
-        puts format_list
+        puts format_long_line
       end
     else
       show_column_format
@@ -41,7 +41,7 @@ class List
     (total_files / 2.0).ceil
   end
 
-  def format_list
+  def format_long_line
     link = @metadata.link
     user = @metadata.user_name
     group = @metadata.user_group
@@ -93,5 +93,5 @@ class List
   end
 end
 
-list = List.new
+list = LsCommand.new
 list.output_list

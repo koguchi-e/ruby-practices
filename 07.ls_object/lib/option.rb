@@ -13,7 +13,7 @@ class Option
     @options.include?('-r')
   end
 
-  def show_list?
+  def show_long?
     @options.include?('-l')
   end
 
