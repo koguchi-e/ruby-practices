@@ -2,7 +2,7 @@
 
 require 'etc'
 
-class Entry
+class FileEntry
   def initialize(entry)
     @entry = entry
   end
