@@ -2,20 +2,20 @@
 
 class CommandLineOption
   def initialize
-    @options = ARGV.flat_map do |argument|
+    @option = ARGV.flat_map do |argument|
       argument.start_with?('-') ? argument[1..].chars.map { |c| "-#{c}" } : argument
     end
   end
 
   def show_all?
-    @options.include?('-a')
+    @option.include?('-a')
   end
 
   def show_reverse?
-    @options.include?('-r')
+    @option.include?('-r')
   end
 
   def show_long?
-    @options.include?('-l')
+    @option.include?('-l')
   end
 end

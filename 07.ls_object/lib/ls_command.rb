@@ -6,12 +6,12 @@ require_relative './command_line_option'
 
 class LsCommand
   def initialize
-    @option = CommandLineOption.new
+    @command_line_option = CommandLineOption.new
     @load_entries = load_entries
   end
 
   def output_list
-    if @option.show_long?
+    if @command_line_option.show_long?
       puts "total #{calc_total_blocks}"
       @load_entries.each do |name|
         metadata = FileMetadata.new(name)
@@ -25,13 +25,13 @@ class LsCommand
   private
 
   def load_entries
-    entries = if @option.show_all?
+    entries = if @command_line_option.show_all?
                 Dir.entries('.')
               else
                 Dir['*']
               end
     entries.sort_by!(&:downcase)
-    entries.reverse! if @option.show_reverse?
+    entries.reverse! if @command_line_option.show_reverse?
     entries
   end
 
