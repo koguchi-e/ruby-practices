@@ -29,7 +29,7 @@ class FileMetadata
   end
 
   def time_stamp
-    @stat.mtime.strftime('%b %e %H:%M')
+    @stat.mtime
   end
 
   def name

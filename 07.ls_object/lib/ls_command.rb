@@ -47,10 +47,10 @@ class LsCommand
     user = metadata.user_name
     group = metadata.user_group
     size = metadata.file_size
-    time = metadata.time_stamp
+    time = metadata.time_stamp.strftime('%b %e %H:%M')
     perm = permission_string(metadata)
     name = metadata.name
-    format("%<perm>s %<link>2d %<user>-8s %<group>-8s %<size>4d %<time>s %<name>s\n",
+    format("%<perm>s%<link>2d %<user>-8s%<group>-8s%<size>4d %<time>s %<name>s\n",
            perm:,
            link:,
            user:,
