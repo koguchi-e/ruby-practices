@@ -7,13 +7,13 @@ require_relative './command_line_option'
 class LsCommand
   def initialize
     @command_line_option = CommandLineOption.new
-    @load_entries = load_entries
+    @entries = load_entries
   end
 
   def output_list
     if @command_line_option.show_long?
       puts "total #{calc_total_blocks}"
-      @load_entries.each do |name|
+      @entries.each do |name|
         metadata = FileMetadata.new(name)
         puts format_long_line(metadata)
       end
@@ -36,7 +36,7 @@ class LsCommand
   end
 
   def calc_total_blocks
-    total_files = @load_entries.sum do |file|
+    total_files = @entries.sum do |file|
       File.exist?(file) ? File.stat(file).blocks : 0
     end
     (total_files / 2.0).ceil
@@ -79,10 +79,10 @@ class LsCommand
 
   CELLS = 3
   def show_column_format
-    row_count = (@load_entries.size.to_f / CELLS).ceil
+    row_count = (@entries.size.to_f / CELLS).ceil
     columns = Array.new(CELLS) { [] }
 
-    @load_entries.each_with_index do |file, index|
+    @entries.each_with_index do |file, index|
       col = index.div(row_count)
       columns[col] << file
     end
