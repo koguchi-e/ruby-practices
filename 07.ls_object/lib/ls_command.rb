@@ -13,9 +13,12 @@ class LsCommand
   def output_list
     if @command_line_option.show_long?
       puts "total #{calc_total_blocks}"
-      @entries.each do |name|
-        metadata = FileMetadata.new(name)
-        puts format_long_line(metadata)
+      metadatas = @entries.map { |name| FileMetadata.new(name) }
+      user_column_width = metadatas.map { |m| m.user_name.length }.max
+      group_column_width = metadatas.map { |m| m.user_group.length }.max
+
+      metadatas.each do |metadata|
+        puts format_long_line(metadata, user_column_width, group_column_width)
       end
     else
       show_column_format
@@ -42,15 +45,15 @@ class LsCommand
     (total_files / 2.0).ceil
   end
 
-  def format_long_line(metadata)
+  def format_long_line(metadata, user_column_width, group_column_width)
     link = metadata.link
-    user = metadata.user_name
-    group = metadata.user_group
+    user = metadata.user_name.ljust(user_column_width)
+    group = metadata.user_group.ljust(group_column_width)
     size = metadata.file_size
     time = metadata.time_stamp.strftime('%b %e %H:%M')
     perm = permission_string(metadata)
     name = metadata.name
-    format("%<perm>s%<link>2d %<user>-8s%<group>-8s%<size>4d %<time>s %<name>s\n",
+    format("%<perm>s%<link>2d %<user>s %<group>s %<size>4d %<time>s %<name>s\n",
            perm:,
            link:,
            user:,
@@ -91,7 +94,7 @@ class LsCommand
     max_width = names.map(&:length).max
 
     row_count.times do |row_idx|
-      line = columns.map { |col| col[row_idx] || ' ' }.map { |name| name.ljust(max_width) }.join(" ")
+      line = columns.map { |col| col[row_idx] || ' ' }.map { |name| name.ljust(max_width) }.join(' ')
       puts line
     end
   end

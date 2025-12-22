@@ -31,9 +31,6 @@
 07.ls_object/test/fixtures/file3.txt
 07.ls_object/test/fixtures/Dir1
 07.ls_object/test/fixtures/Dir2
-07.ls_object/test/fixtures/ABCDEFGHIJKLMNOPQRSTUVWXYZABCDE
-07.ls_object/test/fixtures/ABCDEFGHIJKLMNOPQRSTUVWXYZABCD
-07.ls_object/test/fixtures/ABCDEFGHIJKLMNOPQRSTUVWXYZABCD.rb
 
 # Used by dotenv library to load environment variables.
 # .env

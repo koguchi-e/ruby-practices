@@ -9,9 +9,9 @@ class CommandLineOption
     @show_long = false
     
     OptionParser.new do |opt|
-      opt.on('-a') {@show_all = true}
-      opt.on('-r') {@show_reverse = true}
-      opt.on('-l') {@show_long = true}
+      opt.on('-a') { @show_all = true }
+      opt.on('-r') { @show_reverse = true }
+      opt.on('-l') { @show_long = true }
     end.parse!(ARGV)
   end
 
