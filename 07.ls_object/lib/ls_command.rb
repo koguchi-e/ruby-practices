@@ -87,9 +87,12 @@ class LsCommand
       columns[col] << file
     end
 
+    names = columns.flatten
+    max_width = names.map(&:length).max
+
     row_count.times do |row_idx|
-      line = columns.map { |col| col[row_idx] || ' ' }.map { |name| name.ljust(20) }.join
-      puts line.rstrip
+      line = columns.map { |col| col[row_idx] || ' ' }.map { |name| name.ljust(max_width) }.join(" ")
+      puts line
     end
   end
 end
