@@ -13,19 +13,25 @@ class LsCommand
   def output_list
     if @command_line_option.show_long?
       puts "total #{calc_total_blocks}"
-      metadatas = @entries.map { |name| FileMetadata.new(name) }
-      user_column_width = metadatas.map { |m| m.user_name.length }.max
-      group_column_width = metadatas.map { |m| m.user_group.length }.max
-
-      metadatas.each do |metadata|
-        puts format_long_line(metadata, user_column_width, group_column_width)
-      end
+      output_long_list
     else
       show_column_format
     end
   end
 
   private
+
+  def output_long_list
+    metadatas = @entries.map { |name| FileMetadata.new(name) }
+    link_width = metadatas.map { |m| m.link.to_s.length }.max
+    user_column_width = metadatas.map { |m| m.user_name.length }.max
+    group_column_width = metadatas.map { |m| m.user_group.length }.max
+    file_size_width = metadatas.map { |m| m.file_size.to_s.length }.max
+
+    metadatas.each do |metadata|
+      puts format_long_line(metadata, link_width, user_column_width, group_column_width, file_size_width)
+    end
+  end
 
   def load_entries
     entries = if @command_line_option.show_all?
@@ -45,15 +51,25 @@ class LsCommand
     (total_files / 2.0).ceil
   end
 
-  def format_long_line(metadata, user_column_width, group_column_width)
-    link = metadata.link
+  def formatted_time(metadata)
+    now = Time.now
+    half_year_seconds = 60 * 60 * 24 * 30 * 6
+    if (now - metadata.time_stamp).abs >= half_year_seconds
+      metadata.time_stamp.strftime('%b %e  %G')
+    else
+      metadata.time_stamp.strftime('%b %e %H:%M')
+    end
+  end
+
+  def format_long_line(metadata, link_width, user_column_width, group_column_width, file_size_width)
+    perm = permission_string(metadata)
+    link = metadata.link.to_s.rjust(link_width)
     user = metadata.user_name.ljust(user_column_width)
     group = metadata.user_group.ljust(group_column_width)
-    size = metadata.file_size
-    time = metadata.time_stamp.strftime('%b %e %H:%M')
-    perm = permission_string(metadata)
+    size = metadata.file_size.to_s.rjust(file_size_width)
+    time = formatted_time(metadata)
     name = metadata.name
-    format("%<perm>s%<link>2d %<user>s %<group>s %<size>4d %<time>s %<name>s\n",
+    format("%<perm>s %<link>s %<user>s %<group>s %<size>s %<time>s %<name>s\n",
            perm:,
            link:,
            user:,

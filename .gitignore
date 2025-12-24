@@ -31,6 +31,8 @@
 07.ls_object/test/fixtures/file3.txt
 07.ls_object/test/fixtures/Dir1
 07.ls_object/test/fixtures/Dir2
+07.ls_object/test/fixtures/future_file.txt
+07.ls_object/test/fixtures/old_file.txt
 
 # Used by dotenv library to load environment variables.
 # .env

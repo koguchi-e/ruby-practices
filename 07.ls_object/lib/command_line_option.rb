@@ -7,7 +7,7 @@ class CommandLineOption
     @show_all = false
     @show_reverse = false
     @show_long = false
-    
+
     OptionParser.new do |opt|
       opt.on('-a') { @show_all = true }
       opt.on('-r') { @show_reverse = true }
